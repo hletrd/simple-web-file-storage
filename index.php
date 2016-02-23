@@ -10,6 +10,11 @@ mysql_connect("localhost", DB_user, DB_password) or die("DB Error");
 mysql_select_db(DB_name) or die("DB Error");
 mysql_query("CREATE TABLE cloud(id int NOT NULL auto_increment, filename_saved TEXT NOT NULL, filename_original TEXT NOT NULL, filesize BIGINT NOT NULL, download_cnt INT NOT NULL, ip TEXT NOT NULL, PRIMARY KEY (id))");
 mysql_query("CREATE TABLE log(id int NOT NULL auto_increment, filename_saved TEXT NOT NULL, filename_original TEXT NOT NULL, filesize BIGINT NOT NULL, ip TEXT NOT NULL, PRIMARY KEY (id))");
+mysql_query("ALTER TABLE cloud CONVERT TO CHARSET utf8;");
+mysql_query("ALTER TABLE log CONVERT TO CHARSET utf8;");
+mysql_query("SET session character_set_connection=utf8;");
+mysql_query("SET session character_set_results=utf8;");
+mysql_query("SET session character_set_client=utf8;");
 
 if (isset($_GET["upload"])){
 	if ($_FILES["file"]["size"] > file_limit_bytes){
