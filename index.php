@@ -65,7 +65,7 @@ if (isset($_GET["upload"])){
 		var cb = new Clipboard("#copy");
 		cb.on(\'success\', function(e) {
 			$("#copy").tooltip("show");
-			setTimeout(function(){$("#copy").tooltip("hide");},2500);
+			setTimeout(function(){$("#copy").tooltip("destroy");},2500);
 		});
 		</script>
 		</div>
