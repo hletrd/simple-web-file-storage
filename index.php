@@ -67,7 +67,7 @@ if (isset($_GET["upload"])){
 			<div class="container">
 			<div class="col-xs-12">
 			<div style="height: 15px;"></div>
-			<label>' . htmlspecialchars($_FILES["file"]["name"]) . '와 해시가 일치하는 파일이 이미 업로드되어 있습니다: <a class="btn btn-primary" href="' . default_domain . explode('/', $data[1])[2] . '">' . default_domain . explode('/', $data[1])[2] . '</a> <button id="copy" class="btn btn-default" data-clipboard-text="' . default_domain . explode('/', $data[1])[2] . '" data-toggle="tooltip" data-placement="right" title="복사되었습니다!">복사</button></label>
+			<label>' . htmlspecialchars($_FILES["file"]["name"]) . '와 해시가 일치하는 파일이 이미 업로드되어 있습니다(MD5 해시: ' . $md5 . '): <a class="btn btn-primary" href="' . default_domain . explode('/', $data[1])[2] . '">' . default_domain . explode('/', $data[1])[2] . '</a> <button id="copy" class="btn btn-default" data-clipboard-text="' . default_domain . explode('/', $data[1])[2] . '" data-toggle="tooltip" data-placement="right" title="복사되었습니다!">복사</button></label>
 			<script>
 			var cb = new Clipboard("#copy");
 			cb.on(\'success\', function(e) {
@@ -96,7 +96,7 @@ if (isset($_GET["upload"])){
 			<div class="container">
 			<div class="col-xs-12">
 			<div style="height: 15px;"></div>
-			<label>' . htmlspecialchars($_FILES["file"]["name"]) . '는 다음 링크에서 다운로드하실 수 있습니다: <a class="btn btn-primary" href="' . default_domain . $random . '">' . default_domain . $random . '</a> <button id="copy" class="btn btn-default" data-clipboard-text="' . default_domain . $random . '" data-toggle="tooltip" data-placement="right" title="복사되었습니다!">복사</button></label>
+			<label>' . htmlspecialchars($_FILES["file"]["name"]) . '는 다음 링크에서 다운로드하실 수 있습니다(MD5 해시: ' . $md5 . '): <a class="btn btn-primary" href="' . default_domain . $random . '">' . default_domain . $random . '</a> <button id="copy" class="btn btn-default" data-clipboard-text="' . default_domain . $random . '" data-toggle="tooltip" data-placement="right" title="복사되었습니다!">복사</button></label>
 			<script>
 			var cb = new Clipboard("#copy");
 			cb.on(\'success\', function(e) {
