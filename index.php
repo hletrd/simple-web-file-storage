@@ -17,9 +17,15 @@ if (isset($_GET["upload"])){
 		<head>
 		<meta charset="UTF-8">
 		<title>Simple file storage</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 		</head>
 		<body>
-		' . file_limit_bytes/1024/1024 . 'MiB가 넘는 파일은 업로드하실 수 없습니다.
+		<div class="container">
+		<div class="col-xs-12">
+		<div style="height: 15px;"></div>
+		<label>' . file_limit_bytes/1024/1024 . 'MiB가 넘는 파일은 업로드하실 수 없습니다.</label>
+		</div>
+		</div>
 		</body>
 		</html>';
 	} else {
@@ -45,9 +51,25 @@ if (isset($_GET["upload"])){
 		<head>
 		<meta charset="UTF-8">
 		<title>Simple file storage</title>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.5/clipboard.min.js"></script>
 		</head>
 		<body>
-		' . htmlspecialchars($_FILES["file"]["name"]) . '는 다음 링크에서 다운로드하실 수 있습니다: <a href="' . default_domain . $random . '">' . default_domain . $random . '</a>
+		<div class="container">
+		<div class="col-xs-12">
+		<div style="height: 15px;"></div>
+		<label>' . htmlspecialchars($_FILES["file"]["name"]) . '는 다음 링크에서 다운로드하실 수 있습니다: <a class="btn btn-primary" href="' . default_domain . $random . '">' . default_domain . $random . '</a> <button id="copy" class="btn btn-default" data-clipboard-text="' . default_domain . $random . '" data-toggle="tooltip" data-placement="right" title="복사되었습니다!">복사</button></label>
+		<script>
+		var cb = new Clipboard("#copy");
+		cb.on(\'success\', function(e) {
+			$("#copy").tooltip("show");
+			setTimeout(function(){$("#copy").tooltip("hide");},2500);
+		});
+		</script>
+		</div>
+		</div>
 		</body>
 		</html>';
 	}
@@ -78,11 +100,20 @@ echo '<!doctype html>
 <head>
 <meta charset="UTF-8">
 <title>Simple file storage</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 </head>
 <body>
-최대 업로드 가능 용량: ' . file_limit_bytes/1024/1024 . ' MiB<br /><br />
-<form method="POST" action="./?upload" enctype="multipart/form-data"><button onclick="document.getElementById(\'file\').click(); return false;">1. 업로드할 파일을 선택하세요.</button><input type="file" id="file" name="file" onchange="if (document.getElementById(\'file\').files[0].size > ' . file_limit_bytes . ') alert(\'Cannot upload file over ' . file_limit_bytes . ' bytes.\'); document.getElementById(\'upload\').value = document.getElementById(\'file\').value + \' Upload\';" style="display:none"><br /><br /><input type="submit" id="upload" value="2. 업로드"></form>
-<br />
+<div class="container">
+<div class="col-xs-12">
+<div style="height: 15px;"></div>
+<div class="row"><label><strong>최대 업로드 가능 용량</strong>: ' . file_limit_bytes/1024/1024 . ' MiB<label></div>
+<div style="height: 5px;"></div>
+<form method="POST" action="./?upload" enctype="multipart/form-data" onsubmit="if(!document.getElementById(\'file\').value) {alert(\'파일을 선택하세요!\'); return false;} else return true;">
+<div class="row"><button class="btn btn-primary" onclick="document.getElementById(\'file\').click(); return false;">1. 업로드할 파일을 선택하세요.</button><input type="file" id="file" name="file" onchange="if (document.getElementById(\'file\').files[0].size > ' . file_limit_bytes . ') alert(\'Cannot upload file over ' . file_limit_bytes . ' bytes.\'); document.getElementById(\'upload\').value = \'2. \' + document.getElementById(\'file\').value + \' 업로드\';" style="display:none"></div>
+<div style="height: 15px;"></div>
+<div class="row"><input class="btn btn-success" type="submit" id="upload" value="2. 업로드"></div>
+</form>
+<div class="row">
 <script src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <ins id="ad" class="adsbygoogle"
 style="display:inline-block;width:336px;height:280px"
@@ -94,10 +125,17 @@ if (!document.getElementById("aswift_0_expand")) {
 	alert("AdBlock 꺼주세요 ㅠㅠ");
 }
 </script>
-<br />
+</div>
+<div style="height: 15px;"></div>
+<ul>
+<li>하루 30~40GB 이상의 트래픽을 잡아먹거나, 동일 IP에서 업로드한 파일이 100GB 이상의 용량을 차지할 경우 삭제 대상이 될 수 있습니다.</li>
+</ul>
+<div style="height: 15px;"></div>
+<div class="row">
 Powered by HLETRD
-<br />
-*과도한 서버 부하를 일으키는 파일은 임의로 삭제될 수 있습니다. 하루 30~40GB 이상의 트래픽을 잡아먹거나, 동일 IP에서 업로드한 파일이 100GB 이상의 용량을 차지할 경우 삭제 대상이 될 수 있습니다.
+</div>
+</div>
+</div>
 </body>
 </html>';
 }
