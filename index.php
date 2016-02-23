@@ -90,7 +90,7 @@ data-ad-client="ca-pub-8739077797209742"
 data-ad-slot="2072551166"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
-if (document.getElementById("ad").getAttribute("data-adsbygoogle-status") == null) {
+if (!document.getElementById("aswift_0_expand")) {
 	alert("AdBlock 꺼주세요 ㅠㅠ");
 }
 </script>
