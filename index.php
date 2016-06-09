@@ -136,7 +136,7 @@ if (isset($_GET["upload"])){
 		flush();
 	}
 } else {
-exec('df | grep /var/www', $output);
+exec('df | grep /var', $output);
 preg_match('/([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)/', $output[0], $matches);
 echo '<!doctype html>
 <head>
@@ -144,6 +144,11 @@ echo '<!doctype html>
 <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Simple file storage</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<style type="text/css">
+#filedrag {
+	display: none;
+}
+</style>
 </head>
 <body>
 <div class="container">
@@ -152,7 +157,7 @@ echo '<!doctype html>
 <div class="row"><label><strong>최대 업로드 가능 용량</strong>: ' . file_limit_bytes/1024/1024 . ' MiB</label></div>
 <div style="height: 5px;"></div>
 <form method="POST" action="./?upload" enctype="multipart/form-data" onsubmit="if(!document.getElementById(\'file\').value) {alert(\'파일을 선택하세요!\'); return false;} else return true;">
-<div class="row"><button class="btn btn-primary btn-lg" onclick="document.getElementById(\'file\').click(); return false;">1. 업로드할 파일을 선택하세요.</button><input type="file" id="file" name="file" onchange="if (document.getElementById(\'file\').files[0].size > ' . file_limit_bytes . ') alert(\'Cannot upload file over ' . file_limit_bytes . ' bytes.\'); document.getElementById(\'upload\').value = \'2. \' + document.getElementById(\'file\').value + \' 업로드\';" style="display:none"></div>
+<div class="row"><button class="btn btn-primary btn-lg" onclick="document.getElementById(\'file\').click(); return false;">1. 업로드할 파일을 선택하세요.</button>&nbsp;&nbsp;<div id="filedrag" class="btn btn-default btn-lg">또는 여기에 놓으세요.</div><input type="file" id="file" name="file" onchange="if (document.getElementById(\'file\').files[0].size > ' . file_limit_bytes . ') alert(\'' . file_limit_bytes . ' 바이트를 넘는 파일은 업로드할 수 없습니다.\'); document.getElementById(\'upload\').value = \'2. \' + document.getElementById(\'file\').value + \' 업로드\';" style="display:none"></div>
 <div style="height: 15px;"></div>
 <div class="row"><input class="btn btn-success btn-lg" type="submit" id="upload" value="2. 업로드"></div>
 </form>
@@ -172,16 +177,15 @@ data-ad-slot="2072551166"></ins>
 <li><strong>개인정보나 기타 민감한 정보가 담긴 파일을 암호화되지 않은 채로 올리지 마세요.</strong></li>
 <li>파일은 기본적으로 무기한 보관됩니다. 다만 단일 파일이 하루 50GB 이상의 트래픽을 사용하거나, 동일 IP에서 업로드한 파일이 50GB 이상의 용량을 차지할 경우 삭제될 수 있습니다.</li>
 <li>서버가 위치한 국가(대한민국)에서 법적으로 문제가 되는 파일은 삭제될 수 있습니다. <s>사실 암호 건 채 압축해서 올리시면 됩니다.</s></li>
-<li>스토리지는 HGST Deskstar 4TB 3개를 RAID 5로 묶은 뒤 2TB의 가상 볼륨을 만들어 사용하고 있습니다.</li>
-<li>현재 총 용량 ' . (intval(($matches[2]+$matches[3])/1024/1024*1000)/1000) . 'GiB 중 ' . (intval($matches[2]/1024/1024*1000)/1000) . 'GiB를 사용중으로, ' . (intval($matches[3]/1024/1024*1000)/1000) . 'GiB의 여유공간이 있습니다.</li>
+<!--<li>현재 총 용량 ' . (intval(($matches[2]+$matches[3])/1024/1024*1000)/1000) . 'GiB 중 ' . (intval($matches[2]/1024/1024*1000)/1000) . 'GiB를 사용중으로, ' . (intval($matches[3]/1024/1024*1000)/1000) . 'GiB의 여유공간이 있습니다.</li>-->
 </ul>
 <div style="height: 15px;"></div>
-<div class="row">
+<!--<div class="row">
 <div class="progress">
 	<div class="progress-bar progress-bar-success progress-bar-striped" style="width: ' . $matches[4] . '%">
 		' . (intval($matches[2]/1024/1024*1000)/1000) . ' GiB / ' . (intval(($matches[2]+$matches[3])/1024/1024*1000)/1000) . ' GiB
 	</div>
-</div>
+</div>-->
 </div>
 <div style="height: 15px;"></div>
 <div class="row">
@@ -193,6 +197,20 @@ Running on CentOS 7 + Apache + MariaDB + PHP Stack
 <script>
 if (!document.getElementById("aswift_0_expand")) {
 	alert("AdBlock 꺼주세요 ㅠㅠ");
+}
+if (window.File && window.FileList && window.FileReader) {
+	document.getElementById("filedrag").addEventListener("drop", function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		var files = e.target.files || e.dataTransfer.files;
+		var file = files[0];
+		document.getElementById("upload").value = "2. " + file.name + " 업로드";
+		document.getElementById("file").files = files;
+	});
+	document.getElementById("filedrag").addEventListener("dragover", function(e) {
+		e.preventDefault();
+	});
+	document.getElementById("filedrag").style.display = "inline-block";
 }
 </script>
 </body>
